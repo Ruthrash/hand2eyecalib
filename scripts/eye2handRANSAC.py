@@ -1,6 +1,8 @@
 import random
 import numpy as np
 import baldor as br
+import tf.transformations as tf_utils
+random.seed(10)
 
 class Eye2HandRANSAC:
     def __init__(self,As, Bs, solver, min_pts=3, iterations=1000, thresh=0.05) -> None:
@@ -15,6 +17,16 @@ class Eye2HandRANSAC:
         self.besterr = 60000
         self.bestlen = 0
         pass
+
+    # def compute_estimation_error(self, X_hat, A, B):
+
+    #     AX = np.matmul(A, X_hat)
+    #     BX = np.matmul(X_hat, B)
+    #     AXrpy = np.array(tf_utils.euler_from_matrix(AX))
+    #     BXrpy = np.array(tf_utils.euler_from_matrix(BX))
+    #     rot_error = np.linalg.norm(AXrpy-BXrpy)*(180.00/np.pi)# converts errors to degrees
+    #     trans_error = np.linalg.norm(AX[:3, 3]-BX[:3, 3])# convert errors to cm
+    #     return  trans_error, rot_error
 
     def compute_estimation_error(self, X, X_hat):
         #Rerror = np.eye(4)
@@ -33,8 +45,9 @@ class Eye2HandRANSAC:
             X = self.solver(A,B)
             for idx in index_list:
                 if idx not in maybe_inliers_idxs:
+                    #t_error, r_error = self.compute_estimation_error(X, self.As[idx], self.Bs[idx])
                     t_error, r_error = self.compute_estimation_error(np.matmul(self.As[idx],X),
-                                                                    np.matmul(X,self.Bs[idx]))
+                                                                   np.matmul(X,self.Bs[idx]))                    
                     if np.sum(t_error) < self.thresh:
                         maybe_inliers_idxs.append(idx)
 
@@ -44,9 +57,10 @@ class Eye2HandRANSAC:
                 better_X = self.solver(inlierAs, inlierBs)
                 thiserror = 0 
                 for maybe_inlier_idx in maybe_inliers_idxs:
-                    t_error, r_error = self.compute_estimation_error(np.matmul(self.As[maybe_inlier_idx], better_X),
-                                                                                np.matmul(better_X, self.Bs[maybe_inlier_idx]))
-                    thiserror += np.abs(np.sum(t_error))
+                    # t_error, r_error = self.compute_estimation_error(X, self.As[maybe_inlier_idx], self.Bs[maybe_inlier_idx])
+                    t_error, r_error = self.compute_estimation_error(np.matmul(self.As[maybe_inlier_idx],X), np.matmul(X,self.Bs[maybe_inlier_idx]))
+                    thiserror += np.abs(np.sum(t_error))#np.abs(r_error)
+                    #thiserror += t_error
 
                 thiserror = thiserror/len(maybe_inliers_idxs)
                 if thiserror < self.besterr :

@@ -59,21 +59,21 @@ class Calibrate:
             Xhat = ransac_obj.Run()
             angles = tf_utils.euler_from_matrix(Xhat)
             angles = np.array(angles)*180.0/np.pi
-            print("rotation:", angles)
-            print("translation= ", Xhat[0:3,3] )
+            # print("rotation:", angles)
+            # print("translation= ", Xhat[0:3,3] )
             print('trans_err= ', abs(Xhat[0:3,3] - self.true_trans))
             print('rot_err= ', abs(angles - self.true_rot))
             stop = timeit.default_timer()
             print('run time= ', stop - start)
-            
+
             print("Without RANSAC algorithm: ", key)
             start = timeit.default_timer()
             solver_instance = value()
             Xhat = solver_instance(self.A, self.B)
             angles = tf_utils.euler_from_matrix(Xhat)
             angles = np.array(angles)*180.0/np.pi
-            print("rotation:", angles)
-            print("translation= ", Xhat[0:3,3] )
+            # print("rotation:", angles)
+            # print("translation= ", Xhat[0:3,3] )
             print('trans_err= ', abs(Xhat[0:3,3] - self.true_trans))
             print('rot_err= ', abs(angles - self.true_rot))
             stop = timeit.default_timer()

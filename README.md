@@ -6,19 +6,19 @@ Different Solvers for AX=XB problem forumation of hand2eye calibratiob i.e A fix
 - Daniilidis1999
 - ParkBryan1994
 - TsaiLenz1989
-
+- Kronecker Product
 - EKF 
 - IEKF 
+
+
 - Ceres:Levenberg-Marquadt 
 - (Factor Graphs?)
 
 ## Dependencies
-- Ceres C++ 
 - franka_ros
 - libfranka
 
 ## Python Dependenices:
-- PyRansac - https://pyransac.readthedocs.io/en/latest/
 - scipy
 - baldor
 
@@ -27,6 +27,6 @@ Different Solvers for AX=XB problem forumation of hand2eye calibratiob i.e A fix
 
 ## References: 
 - EKF, IEKF, UKF, Kronecker Product- https://github.com/eayvali/Pose-Estimation-for-Sensor-Calibration
-- find references for solvers
+- closed form - https://github.com/crigroup/handeye
 - ceres solver- https://github.com/jhu-lcsr/handeye_calib_camodocal
 - 
