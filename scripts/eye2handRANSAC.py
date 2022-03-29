@@ -2,10 +2,10 @@ import random
 import numpy as np
 import baldor as br
 import tf.transformations as tf_utils
-random.seed(10)
+random.seed(11)
 
 class Eye2HandRANSAC:
-    def __init__(self,As, Bs, solver, min_pts=3, iterations=1000, thresh=0.05) -> None:
+    def __init__(self,As, Bs, solver, min_pts=3, iterations=1000, thresh=0.01) -> None:
         self.As = As 
         self.Bs = Bs 
         self.iterations = iterations 
@@ -58,7 +58,7 @@ class Eye2HandRANSAC:
                 thiserror = 0 
                 for maybe_inlier_idx in maybe_inliers_idxs:
                     # t_error, r_error = self.compute_estimation_error(X, self.As[maybe_inlier_idx], self.Bs[maybe_inlier_idx])
-                    t_error, r_error = self.compute_estimation_error(np.matmul(self.As[maybe_inlier_idx],X), np.matmul(X,self.Bs[maybe_inlier_idx]))
+                    t_error, r_error = self.compute_estimation_error(np.matmul(self.As[maybe_inlier_idx],better_X), np.matmul(better_X,self.Bs[maybe_inlier_idx]))
                     thiserror += np.abs(np.sum(t_error))#np.abs(r_error)
                     #thiserror += t_error
 
