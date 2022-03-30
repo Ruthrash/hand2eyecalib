@@ -67,7 +67,8 @@ class Eye2HandRANSAC:
                     best_X = better_X
                     self.besterr = thiserror
                     self.bestlen = len(maybe_inliers_idxs)
-        print('best', self.bestlen)
+        print('best samples', self.bestlen)
+        print('best error', self.besterr)
         return best_X
 
 
