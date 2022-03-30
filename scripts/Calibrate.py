@@ -59,10 +59,10 @@ class Calibrate:
             Xhat = ransac_obj.Run()
             angles = tf_utils.euler_from_matrix(Xhat)
             angles = np.array(angles)*180.0/np.pi
-            # print("rotation:", angles)
-            # print("translation= ", Xhat[0:3,3] )
-            print('trans_err= ', abs(Xhat[0:3,3] - self.true_trans))
-            print('rot_err= ', abs(angles - self.true_rot))
+            print("rotation:", angles)
+            print("translation= ", Xhat[0:3,3] )
+            # print('trans_err= ', abs(Xhat[0:3,3] - self.true_trans))
+            # print('rot_err= ', abs(angles - self.true_rot))
             stop = timeit.default_timer()
             print('run time= ', stop - start)
 
@@ -72,10 +72,10 @@ class Calibrate:
             Xhat = solver_instance(self.A, self.B)
             angles = tf_utils.euler_from_matrix(Xhat)
             angles = np.array(angles)*180.0/np.pi
-            # print("rotation:", angles)
-            # print("translation= ", Xhat[0:3,3] )
-            print('trans_err= ', abs(Xhat[0:3,3] - self.true_trans))
-            print('rot_err= ', abs(angles - self.true_rot))
+            print("rotation:", angles)
+            print("translation= ", Xhat[0:3,3] )
+            # print('trans_err= ', abs(Xhat[0:3,3] - self.true_trans))
+            # print('rot_err= ', abs(angles - self.true_rot))
             stop = timeit.default_timer()
             print('run time= ', stop - start)
 
@@ -86,7 +86,7 @@ def main(file_):
 
 
 if __name__ == '__main__':
-    file_ = "/home/ruthz/calib.txt"
+    file_ = "/home/pairlab/calib.txt"
     main(file_)
 
 
