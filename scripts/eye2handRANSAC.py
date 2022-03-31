@@ -5,7 +5,7 @@ import tf.transformations as tf_utils
 #random.seed(11)
 
 class Eye2HandRANSAC:
-    def __init__(self,As, Bs, solver, min_pts=3, iterations=1000, thresh=0.8) -> None:
+    def __init__(self,As, Bs, solver, min_pts=6, iterations=2000, thresh=1.0) -> None:
         self.As = As 
         self.Bs = Bs 
         self.iterations = iterations 
@@ -51,7 +51,7 @@ class Eye2HandRANSAC:
                     if np.sum(t_error) < self.thresh:
                         maybe_inliers_idxs.append(idx)
 
-            if len(maybe_inliers_idxs) > 5:
+            if len(maybe_inliers_idxs) > 15:
                 inlierAs = [self.As[i] for i in maybe_inliers_idxs]
                 inlierBs = [self.Bs[i] for i in maybe_inliers_idxs]
                 better_X = self.solver(inlierAs, inlierBs)

@@ -34,9 +34,13 @@ class Calibrate:
             marker_in_cam = tf_utils.quaternion_matrix([float(data[5]), float(data[6]), float(data[7]), float(data[8])])
             marker_in_cam[0:3,3] = marker_in_cam_trans
 
-            ee_in_base_trans = np.array((float(data[20]), float(data[21]), float(data[22])))
-            ee_in_base = tf_utils.quaternion_matrix([float(data[23]), float(data[24]), float(data[25]), float(data[26])])
+            # ee_in_base_trans = np.array((float(data[20]), float(data[21]), float(data[22])))
+            # ee_in_base = tf_utils.quaternion_matrix([float(data[23]), float(data[24]), float(data[25]), float(data[26])])
+            ee_in_base_trans = np.array((float(data[9]), float(data[10]), float(data[11])))
+            ee_in_base = tf_utils.quaternion_matrix([float(data[12]), float(data[13]), float(data[14]), float(data[15])])
+            
             ee_in_base[0:3,3] = ee_in_base_trans
+
 
             self.data.append(tuple((marker_in_cam, ee_in_base)))
         indices = range(len(self.data))
@@ -57,8 +61,10 @@ class Calibrate:
             solver_instance = value()
             ransac_obj = e2hrs(As=self.A, Bs=self.B, solver=solver_instance)
             Xhat = ransac_obj.Run()
-            angles = tf_utils.euler_from_matrix(Xhat)
-            angles = np.array(angles)*180.0/np.pi
+            #angles = tf_utils.euler_from_matrix(Xhat)
+            Xhat = tf_utils.inverse_matrix(Xhat)
+            angles = tf_utils.quaternion_from_matrix(Xhat)
+            angles = np.array(angles)#*180.0/np.pi
             print("rotation:", angles)
             print("translation= ", Xhat[0:3,3] )
             # print('trans_err= ', abs(Xhat[0:3,3] - self.true_trans))
@@ -70,8 +76,10 @@ class Calibrate:
             start = timeit.default_timer()
             solver_instance = value()
             Xhat = solver_instance(self.A, self.B)
-            angles = tf_utils.euler_from_matrix(Xhat)
-            angles = np.array(angles)*180.0/np.pi
+            # angles = tf_utils.euler_from_matrix(Xhat)
+            Xhat = tf_utils.inverse_matrix(Xhat)
+            angles = tf_utils.quaternion_from_matrix(Xhat)
+            angles = np.array(angles)#*180.0/np.pi
             print("rotation:", angles)
             print("translation= ", Xhat[0:3,3] )
             # print('trans_err= ', abs(Xhat[0:3,3] - self.true_trans))

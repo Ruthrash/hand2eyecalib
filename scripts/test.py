@@ -16,6 +16,8 @@ import tf2_ros
 from tf import TransformListener
 import tf.transformations as tf_utils
 
+import zmq
+
 def point_to_object(obj_loc, distance, pan, yaw, rotate):
     r = R.from_rotvec(np.array([0, -pan, 0]))
     r1 = R.from_rotvec(np.array([0,0, yaw]))
@@ -35,10 +37,16 @@ class Eye2HandCalibration:
         self.current_aurco_img_vertices = None
         self.is_new = False
         self.data_collected = False
+        self.zmqPose = None
+
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.REQ)
+        self.socket.connect("tcp://127.0.0.1:2000")
+
         rospy.init_node('listener', anonymous=True)
         self.tf_listener_ = TransformListener()
         #rospy.Subscriber("chatter", FrankaState, self.frankaStateCallBack)
-        if self.is_sim:
+        if is_sim:
             self.aruco_transforms_sub = message_filters.Subscriber("/fiducial_transforms", FiducialTransformArray, queue_size=3)
             self.aruco_img_vertices_sub = message_filters.Subscriber("/fiducial_vertices", FiducialArray, queue_size=3)
             self.franka_states_sub = message_filters.Subscriber("/franka_state_controller/franka_states", FrankaState, queue_size=3)
@@ -76,6 +84,9 @@ class Eye2HandCalibration:
         self.is_new = True
         parent = "camera_link_optical"
         child = "camera_link_optical"
+        self.socket.send_string("HELLO")
+        message = self.socket.recv()
+        self.zmqPose = np.frombuffer(message).astype(np.float32)
         #if self.tf_listener_.frameExists(parent) and self.tf_listener_.frameExists(child):
             #t = self.tf_listener_.getLatestCommonTime(parent, child)
             #tag_position, tag_quaternion = self.tf_listener_.lookupTransform(parent,child,rospy.Time(0.0))
@@ -170,7 +181,12 @@ class Eye2HandCalibration:
             #if self.tf_listener_.frameExists(parent) and self.tf_listener_.frameExists(child):
             t = self.tf_listener_.getLatestCommonTime(parent, child)
             ee_position, ee_quaternion = self.tf_listener_.lookupTransform(parent, child,t)   
-            print(ee_position, ee_quaternion)
+            
+            zmq_position = self.zmqPose[12:15]
+            zmq_quat = tf_utils.quaternion_from_matrix(self.zmqPose)
+
+            print(ee_position, zmq_position)
+            print(ee_quaternion, zmq_quat)
             #else:
             #    print(parent, child, " can't find tf")            
         
