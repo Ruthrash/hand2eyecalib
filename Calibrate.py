@@ -5,9 +5,17 @@ from typing import Optional
 import numpy as np 
 import tf.transformations as tf_utils
 import timeit
-import park_martin
-from solvers import Daniilidis1999, ParkBryan1994, TsaiLenz1989
-from eye2handRANSAC import Eye2HandRANSAC as e2hrs
+from Solvers import Daniilidis1999, ParkBryan1994, TsaiLenz1989
+from Eye2handRANSAC import Eye2HandRANSAC as e2hrs
+import copy
+
+def matinv(mat:np.array):
+    mat = copy.copy(mat)
+    new_R = mat[0:3,0:3].transpose() 
+    new_t = np.matmul(np.negative(new_R), mat[0:3, 3])
+    mat[0:3, 0:3] = new_R
+    mat[0:3, 3] = new_t
+    return mat
 
 class Calibrate:
     def __init__(self, data_file_name, method=None) -> None:
@@ -49,8 +57,8 @@ class Calibrate:
             marker_in_cam1 = self.data[pair[0]][0]; ee_in_base1 = self.data[pair[0]][1]
             marker_in_cam2 = self.data[pair[1]][0]; ee_in_base2 = self.data[pair[1]][1] 
 
-            A = np.matmul( ee_in_base1, park_martin.matinv(ee_in_base2))
-            B = np.matmul(marker_in_cam1, park_martin.matinv(marker_in_cam2)) 
+            A = np.matmul( ee_in_base1, matinv(ee_in_base2))
+            B = np.matmul(marker_in_cam1, matinv(marker_in_cam2)) 
 
             self.A.append(A)
             self.B.append(B)
@@ -94,7 +102,7 @@ def main(file_):
 
 
 if __name__ == '__main__':
-    file_ = "/home/pairlab/calib.txt"
+    file_ = "sample_data/calib.txt"
     main(file_)
 
 

@@ -10,12 +10,12 @@ import message_filters
 
 class CollectData:
     def __init__(self, num_samples:int=15, file_name:str='calib.txt', 
-                file_location:str='/home/pairlab/', 
+                file_location:str='sample_data/', 
                 port:str="tcp://127.0.0.1:2000") -> None:
 
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.REQ)
-        self.socket.connect("tcp://127.0.0.1:2000")
+        self.socket.connect(port)
         self.num_samples = num_samples
         self.output_file = file_location + file_name
 

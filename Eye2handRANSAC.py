@@ -2,10 +2,10 @@ import random
 import numpy as np
 import baldor as br
 import tf.transformations as tf_utils
-#random.seed(11)
+random.seed(10)
 
 class Eye2HandRANSAC:
-    def __init__(self,As, Bs, solver, min_pts=6, iterations=2000, thresh=1.0) -> None:
+    def __init__(self,As, Bs, solver, min_pts=8, iterations=2000, thresh=1.0) -> None:
         self.As = As 
         self.Bs = Bs 
         self.iterations = iterations 
