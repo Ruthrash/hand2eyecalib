@@ -6,7 +6,7 @@ Different Solvers for AX=XB problem forumation of hand2eye calibratiob i.e A fix
 - Daniilidis1999
 - ParkBryan1994
 - TsaiLenz1989
-- Kronecker Product
+
 
 
 ## Dependencies
