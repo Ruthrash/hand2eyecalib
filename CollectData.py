@@ -40,11 +40,12 @@ class CollectData:
     def getObservationPoses(self,):
         for i in range(self.num_samples):
             print( i)
-            ip = input("Press Enter to continueth sampl3.... else space bar to neglect this sample")
+            ip = input("Press Enter to continueth sampl3.... else space bar to stop")
             if (ip==""):
                 self.writeObs()
             else:
                 print("ignoring input")
+                exit()
                 pass          
 
     def write_to_file(self,line_list):
@@ -108,7 +109,7 @@ class CollectData:
 
     
 def main():
-    cd_instance = CollectData()
+    cd_instance = CollectData(port="tcp://142.1.200.45:2000")
 
 if __name__=="__main__":
     main()
