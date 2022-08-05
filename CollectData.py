@@ -10,7 +10,7 @@ import message_filters
 import tf2_ros
 
 class CollectData:
-    def __init__(self, num_samples:int=15, file_name:str='calib.txt', 
+    def __init__(self, num_samples:int=20, file_name:str='calib.txt', 
                 file_location:str='sample_data/', 
                 port:str="tcp://127.0.0.1:2000") -> None:
 
