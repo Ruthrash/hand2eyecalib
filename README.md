@@ -26,14 +26,24 @@ for data collection in simulation
 ### Collect data: 
 With real real robot:
 
-- run server in the computer connected to the robot- either NUC/microPC 
+- build and run server in the computer connected to the robot- either NUC/microPC 
+```
+cd <path to where you cloned this repo>/libfranka_NUC/
+mkdir build 
+cd build 
+cmake ..
+make 
+./franka_control
+```
 
-
-- - run aruco detection node
+- run aruco detection node, we are using aruco tags with dictionary (DICT_4X4_1000) and fiducial_len as 0.2m
 ```
 roslaunch aruco_detect aruco_detect_calib.launch 
 ```
-
+- run the data collection script
+```
+python CollectData.py
+```
 move the end effector ~10 poses and press enter at each pose to store data for calibration. 
 
 
@@ -64,8 +74,20 @@ Enter the correct data file's path in the Calibrate.py script and run
 ```
 python Calibrate.py
 ```
+### Notes: 
+- If you have an error with Yaml as- 
+```
+TypeError: load() missing 1 required positional argument: 'Loader'
+```
 
-
+edit this line in "/opt/ros/noetic/lib/python3/dist-packages/tf/listener.py"
+```
+data = yaml.load(self._buffer.all_frames_as_yaml()) or {}
+```
+to 
+```
+data = yaml.safe_load(self._buffer.all_frames_as_yaml()) or {}
+```
 ## References: 
 -  Kronecker Product- https://github.com/eayvali/Pose-Estimation-for-Sensor-Calibration
 
