@@ -7,6 +7,7 @@ import rospy
 from tf import TransformListener
 import tf.transformations as tf_utils
 import message_filters
+import tf2_ros
 
 class CollectData:
     def __init__(self, num_samples:int=15, file_name:str='calib.txt', 
@@ -21,6 +22,8 @@ class CollectData:
 
         rospy.init_node('listener', anonymous=True)
         self.tf_listener_ = TransformListener()
+        #tfBuffer = tf2_ros.Buffer()
+        #self.tf_listener_ = tf2_ros.TransformListener(tfBuffer)
 
         if not rospy.core.is_initialized():
             raise rospy.exceptions.ROSInitException("client code must call rospy.init_node() first")
@@ -56,6 +59,9 @@ class CollectData:
             f.write('\n') 
 
     def writeObs(self,):
+
+        #get EE pose wrt Base
+        EEposition, EEquat = self.getCurrentEEFrame()
         #get calibration target pose wrt camera optical frame
         parent = "camera_color_optical_frame"
         child = "fiducial_0"
@@ -75,8 +81,7 @@ class CollectData:
         avg_tag_quaternion = avg_tag_quaternion/count
             
         
-        #get EE pose wrt Base
-        EEposition, EEquat = self.getCurrentEEFrame()
+
 
         now = rospy.Time.now()
         stamp = [str(i) for i in [now.secs, now.nsecs]]

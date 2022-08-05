@@ -27,11 +27,16 @@ for data collection in simulation
 With real real robot:
 
 - run server in the computer connected to the robot- either NUC/microPC 
-- run 
+
+
+- - run aruco detection node
 ```
-python CollectData.py
+roslaunch aruco_detect aruco_detect_calib.launch 
 ```
+
 move the end effector ~10 poses and press enter at each pose to store data for calibration. 
+
+
 
 with simulation: 
 - launch simulation 
@@ -41,6 +46,15 @@ roslaunch franka_gazebo panda.launch x:=-0.5 \
 world:=/home/ruthz/utm/base_ws/src/franka_ros/franka_gazebo/world/stone.sdf \
 controller:=cartesian_impedance_example_controller \
 rviz:=true
+```
+
+- run aruco detection node
+```
+roslaunch aruco_detect aruco_detect_calib.launch 
+```
+- run data collection script 
+```
+python SimCollectData.py
 ```
 move the end effector using the interactive marker to ~10 poses and press enter at each pose to store data for calibration.
 
