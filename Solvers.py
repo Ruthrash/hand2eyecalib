@@ -1,3 +1,4 @@
+# Ref: https://github.com/crigroup/handeye
 #!/usr/bin/env python
 import itertools
 import numpy as np
