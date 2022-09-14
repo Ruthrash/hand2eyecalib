@@ -89,5 +89,6 @@ to
 data = yaml.safe_load(self._buffer.all_frames_as_yaml()) or {}
 ```
 ## References: 
--  Kronecker Product- https://github.com/eayvali/Pose-Estimation-for-Sensor-Calibration
+- https://github.com/crigroup/handeye 
+- https://github.com/eayvali/Pose-Estimation-for-Sensor-Calibration
 
